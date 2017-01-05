@@ -72,11 +72,11 @@ public class App implements Serializable
     {
     	
 		//set a local master since I don't have my own personal cluster for this
-    	SparkConf sparkConf = new SparkConf().setAppName("SparkTest").setMaster("local[2]");
+    	SparkConf sparkConf = new SparkConf().set("spark.driver.memory", "2G").setAppName("SparkTest").setMaster("local[1]");
         JavaSparkContext spark = new JavaSparkContext(sparkConf);
         
         //get the files relevant this would be replaced with some hadoop access for a real product
-        JavaPairRDD<String, String> blogPosts = spark.wholeTextFiles("/media/removable/SD Card/blogs/testthirties/thirties");
+        JavaPairRDD<String, String> blogPosts = spark.wholeTextFiles("/media/removable/SD Card/blogs/testthirties");
         JavaRDD<Map<String, Integer>> blogPostWordFreqRDD = blogPosts.map(x -> countWordFrequencies(x._2()));
         
         //caching ate up all my memory so I had to stop that
@@ -84,12 +84,15 @@ public class App implements Serializable
         
         //Get total counts for the frequencies of each word across all blog posts
         Map<String, Integer> masterWordFreq = 
-        		blogPostWordFreqRDD.map(x -> genMasterWordList(x)).reduce((x, y) -> combineMasterWordList(x, y));
+        		blogPostWordFreqRDD.reduce((x, y) -> combineMasterWordList(x, y));
         
         //get total count for all words across all blog posts
         int totalWords = masterWordFreq.values().stream().reduce((x,y) -> x+y).get();
         
-        
+        System.out.println(totalWords);
+        for(Entry<String, Integer> entry : masterWordFreq.entrySet()){
+        	System.out.println(entry.getKey() + " num occurences: " + entry.getValue());
+        }
         /**Turn these into broadcast variables so they can be accessed to calculate the probabilities
         this could also have been done with custom accumulators, but there are some problems with accumulators
         If I was really putting this out there though I would switch to accumulators for this sort of task**/
@@ -157,8 +160,7 @@ public class App implements Serializable
 	}
 	
 	//generating the master map of the frequency of every word across all contexts
-    public static Map<String, Integer> 
-    	combineMasterWordList(Map<String, Integer> mainList, 
+    public static Map<String, Integer> combineMasterWordList(Map<String, Integer> mainList, 
     		Map<String, Integer> otherList){
     	for(Entry<String, Integer> entry : otherList.entrySet()){
     		Integer mainData = mainList.get(entry.getKey());
@@ -170,21 +172,14 @@ public class App implements Serializable
     	return mainList;
     }
     
-    public static Map<String, Integer> genMasterWordList(Map<String, Integer> singleContextFreq){
-    	Map<String, Integer> masterWordList = new HashMap<String, Integer>();
-    	for(Entry<String, Integer> entry : singleContextFreq.entrySet()){
-    		masterWordList.put(entry.getKey(), entry.getValue());
-    	}
-    	return masterWordList;
-    }
-    
-    //split the strings on spaces and remove all non letters. There would be some apostrophe words that would get affected, but minor for this assignment
+    //split the strings on spaces and remove all non letters.
     public static Map<String, Integer> countWordFrequencies(String context){
     	Splitter wordSplitter = Splitter.on(' ').trimResults(CharMatcher.JAVA_LETTER.negate()).omitEmptyStrings();
     	
     	Map<String, Integer> wordFreq = new HashMap<String, Integer>();
     	
     	for(String word : wordSplitter.split(context)){
+    		word = word.toLowerCase();
     		Integer curFreq = wordFreq.get(word);
     		if(curFreq==null){
     			curFreq = 0;

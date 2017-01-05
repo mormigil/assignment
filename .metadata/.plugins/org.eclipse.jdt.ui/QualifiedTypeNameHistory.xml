@@ -20,4 +20,6 @@
 <fullyQualifiedTypeName name="org.apache.spark.AccumulatorParam"/>
 <fullyQualifiedTypeName name="org.apache.spark.broadcast.Broadcast"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="java.util.Collections"/>
+<fullyQualifiedTypeName name="com.fasterxml.jackson.module.scala.util.Strings"/>
 </qualifiedTypeNameHistroy>

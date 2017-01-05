@@ -1302,3 +1302,100 @@
 2017-01-04 23:03:02,778 [Worker-28] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/main/resources
 2017-01-04 23:03:02,781 [Worker-28] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
 2017-01-04 23:03:02,785 [Worker-28] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/test/resources
+2017-01-04 23:21:38,043 [Worker-30] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:21:38,060 [Worker-30] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/main/resources
+2017-01-04 23:21:38,062 [Worker-30] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:21:38,062 [Worker-30] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/test/resources
+2017-01-04 23:28:30,638 [Worker-29] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:28:30,644 [Worker-29] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/main/resources
+2017-01-04 23:28:30,646 [Worker-29] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:28:30,646 [Worker-29] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/test/resources
+2017-01-04 23:31:25,593 [Worker-34] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:31:25,601 [Worker-34] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/main/resources
+2017-01-04 23:31:25,621 [Worker-34] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:31:25,623 [Worker-34] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/test/resources
+2017-01-04 23:31:41,579 [Worker-30] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:31:41,580 [Worker-30] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/main/resources
+2017-01-04 23:31:41,582 [Worker-30] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:31:41,582 [Worker-30] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/test/resources
+2017-01-04 23:40:27,113 [Worker-1] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
+2017-01-04 23:41:33,746 [Worker-8] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:41:33,753 [Worker-8] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/main/resources
+2017-01-04 23:41:33,759 [Worker-8] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:41:33,759 [Worker-8] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/test/resources
+2017-01-04 23:43:30,953 [Worker-11] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:43:30,961 [Worker-11] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/main/resources
+2017-01-04 23:43:30,964 [Worker-11] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:43:30,966 [Worker-11] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/test/resources
+2017-01-04 23:47:41,799 [Worker-8] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:47:41,800 [Worker-8] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/main/resources
+2017-01-04 23:47:41,802 [Worker-8] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:47:41,806 [Worker-8] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/test/resources
+2017-01-04 23:49:02,125 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:49:02,126 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/main/resources
+2017-01-04 23:49:02,132 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:49:02,139 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/test/resources
+2017-01-04 23:49:48,181 [Worker-14] INFO  o.e.m.c.i.e.AbstractTransferListenerAdapter - Downloading https://repo.maven.apache.org/maven2/com/google/guava/guava/17.0/guava-17.0-sources.jar
+2017-01-04 23:49:49,302 [Worker-14] INFO  o.e.m.c.i.e.AbstractTransferListenerAdapter - Downloaded https://repo.maven.apache.org/maven2/com/google/guava/guava/17.0/guava-17.0-sources.jar
+2017-01-04 23:49:50,538 [Worker-14] INFO  o.e.m.j.internal.DownloadSourcesJob - Downloaded sources for com.google.guava:guava:17.0
+2017-01-04 23:49:50,905 [Worker-7] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:49:50,912 [Worker-7] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/main/resources
+2017-01-04 23:49:50,914 [Worker-7] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:49:50,921 [Worker-7] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/test/resources
+2017-01-04 23:53:52,175 [Worker-7] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:53:52,175 [Worker-7] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/main/resources
+2017-01-04 23:53:52,177 [Worker-7] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:53:52,177 [Worker-7] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/test/resources
+2017-01-04 23:54:45,260 [Worker-15] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:54:45,264 [Worker-15] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/main/resources
+2017-01-04 23:54:45,265 [Worker-15] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:54:45,267 [Worker-15] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/test/resources
+2017-01-04 23:55:34,394 [Worker-17] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:55:34,396 [Worker-17] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/main/resources
+2017-01-04 23:55:34,402 [Worker-17] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:55:34,402 [Worker-17] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/test/resources
+2017-01-04 23:57:00,686 [Worker-8] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:57:00,690 [Worker-8] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/main/resources
+2017-01-04 23:57:00,691 [Worker-8] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:57:00,692 [Worker-8] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/test/resources
+2017-01-04 23:57:42,377 [Worker-8] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:57:42,378 [Worker-8] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/main/resources
+2017-01-04 23:57:42,387 [Worker-8] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-04 23:57:42,387 [Worker-8] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/test/resources
+2017-01-05 00:19:02,013 [Worker-1] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
+2017-01-05 00:22:35,955 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-05 00:22:35,956 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/main/resources
+2017-01-05 00:22:35,961 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-05 00:22:35,961 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/test/resources
+2017-01-05 00:23:16,888 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-05 00:23:16,892 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/main/resources
+2017-01-05 00:23:16,895 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-05 00:23:16,898 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/test/resources
+2017-01-05 00:26:24,825 [Worker-11] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-05 00:26:24,825 [Worker-11] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/main/resources
+2017-01-05 00:26:24,827 [Worker-11] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-05 00:26:24,834 [Worker-11] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/test/resources
+2017-01-05 00:27:34,359 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-05 00:27:34,364 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/main/resources
+2017-01-05 00:27:34,369 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-05 00:27:34,370 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/test/resources
+2017-01-05 00:28:22,699 [Worker-2] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-05 00:28:22,700 [Worker-2] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/main/resources
+2017-01-05 00:28:22,702 [Worker-2] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-05 00:28:22,702 [Worker-2] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/test/resources
+2017-01-05 00:29:00,195 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-05 00:29:00,197 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/main/resources
+2017-01-05 00:29:00,200 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-05 00:29:00,200 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/test/resources
+2017-01-05 00:30:50,059 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-05 00:30:50,059 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/main/resources
+2017-01-05 00:30:50,061 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-05 00:30:50,061 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/test/resources
+2017-01-05 00:31:17,794 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-05 00:31:17,803 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/main/resources
+2017-01-05 00:31:17,808 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-05 00:31:17,813 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/test/resources
+2017-01-05 00:33:51,874 [Worker-11] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-05 00:33:51,877 [Worker-11] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/main/resources
+2017-01-05 00:33:51,879 [Worker-11] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2017-01-05 00:33:51,884 [Worker-11] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /var/host/media/removable/SD Card/Workspace/g2/src/test/resources
