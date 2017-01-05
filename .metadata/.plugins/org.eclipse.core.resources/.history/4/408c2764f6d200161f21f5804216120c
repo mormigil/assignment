@@ -1,0 +1,155 @@
+package sparkassign.g2;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaPairRDD;
+import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.broadcast.Broadcast;
+
+import com.google.common.base.CharMatcher;
+import com.google.common.base.Splitter;
+
+import scala.Tuple2;
+
+/**
+ * Hello world!
+ *
+ */
+public class App implements Serializable
+{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5949733314738766267L;
+
+	public static void main( String[] args )
+    {
+    	
+		//set a local master since I don't have my own personal cluster for this
+    	SparkConf sparkConf = new SparkConf().setAppName("SparkTest").setMaster("local[2]");
+        JavaSparkContext spark = new JavaSparkContext(sparkConf);
+        
+        //get the files relevant this would be replaced with some hadoop access for a real product
+        JavaPairRDD<String, String> blogPosts = spark.wholeTextFiles("/media/removable/SD Card/blogs/thirties");
+        JavaRDD<Map<String, Integer>> blogPostWordFreqRDD = blogPosts.map(x -> countWordFrequencies(x._2()));
+        
+        //caching ate up all my memory so I had to stop that
+        //blogPostWordFreqRDD.cache();
+        
+        //Get total counts for the frequencies of each word across all blog posts
+        Map<String, Integer> masterWordFreq = 
+        		blogPostWordFreqRDD.map(x -> genMasterWordList(x)).reduce((x, y) -> combineMasterWordList(x, y));
+        
+        //get total count for all words across all blog posts
+        int totalWords = masterWordFreq.values().stream().reduce((x,y) -> x+y).get();
+        
+        
+        //Turn these into broadcast variables so they can be accessed to calculate the probabilities
+        //this could also have been done with custom accumulators, but there are some problems with accumulators
+        //If I was really putting this out there though I would switch to accumulators for this sort of task
+        Broadcast<Map<String, Integer>> broadcastMasterFreq = spark.broadcast(masterWordFreq);
+        
+        Broadcast<Integer> broadcastTotalWords = spark.broadcast(totalWords);
+        
+        //create all pairs of words and flat map them with their frequencies
+        
+        JavaPairRDD<Tuple2<String, String>, Integer> allPairFreq = blogPostWordFreqRDD
+        		.flatMapToPair(x -> allWordPairFrequencies(x).iterator());
+        
+        //reduce by key so that each pair of words corresponds to the number of times they were found together
+        allPairFreq = allPairFreq.reduceByKey((x, y) -> x+y);
+        
+        //calculate probs and then output as text file
+        allPairFreq.map(x -> new Tuple2<Tuple2<String, String>, Double>(x._1(), 
+        		calculateSimilarity(x._2(), broadcastMasterFreq.getValue().get(x._1()._1()), 
+        				broadcastMasterFreq.getValue().get(x._1()._2()), broadcastTotalWords.getValue())));
+        
+        allPairFreq.saveAsTextFile("/media/removable/SD Card/blogs/ThirtiesReport");
+        
+        spark.close();
+    }
+	
+	
+	//I'd typically separate functions like these into classes, but for a test project I've left them here
+	//This is the statistics method for calculating the probabilites
+	public static double calculateSimilarity(int XYFreq, int XFreq, int YFreq, int totalWords){
+		double probXY = XYFreq/(totalWords);
+		double probX = XFreq/totalWords;
+		double probY =  YFreq/totalWords;
+		double probNotXY = probY-probXY;
+		double probXNotY = probX-probXY;
+		double probNotXNotY = 1-probX-probY+probXY;
+		double resultSum = 0;
+		//avoid undefined cases with log(0)
+		if(probXY>0)
+			resultSum = probXY*Math.log(probXY/(probX*probY));
+		if(probXNotY>0)
+			resultSum += probXNotY*Math.log(probXNotY/(probX*(1-probY)));
+		if(probNotXY>0)
+			resultSum += probNotXY*Math.log(probNotXY/((1-probX)*probY));
+		if(probNotXNotY>0)
+			resultSum += probNotXNotY*Math.log(probNotXNotY/((1-probX)*(1-probY)));
+		return resultSum;
+		
+	}
+    
+	//From the frequencies of each word generate 
+	public static List<Tuple2<Tuple2<String, String>, Integer>> allWordPairFrequencies(Map<String, Integer> singleContextFreq){
+		List<Tuple2<Tuple2<String, String>, Integer>> pairList = new ArrayList<Tuple2<Tuple2<String, String>, Integer>>();
+		
+		for(Entry<String, Integer> wordFreq : singleContextFreq.entrySet()){
+			for(Entry<String, Integer> wordFreq2 : singleContextFreq.entrySet()){
+				int stringCompare = wordFreq.getKey().compareTo(wordFreq2.getKey());
+				if(stringCompare<0){
+					pairList.add(new Tuple2<Tuple2<String, String>, Integer>(new Tuple2<String, String>(wordFreq.getKey(), 
+							wordFreq2.getKey()), Math.min(wordFreq.getValue(), wordFreq2.getValue())));
+				}
+			}
+		}
+		return pairList;
+	}
+	
+    public static Map<String, Integer> 
+    	combineMasterWordList(Map<String, Integer> mainList, 
+    		Map<String, Integer> otherList){
+    	for(Entry<String, Integer> entry : otherList.entrySet()){
+    		Integer mainData = mainList.get(entry.getKey());
+    		if(mainData==null){
+    			mainData = 0;
+    		} 
+    		mainList.put(entry.getKey(), mainData+entry.getValue());
+    	}
+    	return mainList;
+    }
+    
+    public static Map<String, Integer> genMasterWordList(Map<String, Integer> singleContextFreq){
+    	Map<String, Integer> masterWordList = new HashMap<String, Integer>();
+    	for(Entry<String, Integer> entry : singleContextFreq.entrySet()){
+    		masterWordList.put(entry.getKey(), entry.getValue());
+    	}
+    	return masterWordList;
+    }
+    
+    public static Map<String, Integer> countWordFrequencies(String context){
+    	Splitter wordSplitter = Splitter.on(' ').trimResults(CharMatcher.JAVA_LETTER.negate()).omitEmptyStrings();
+    	
+    	Map<String, Integer> wordFreq = new HashMap<String, Integer>();
+    	
+    	for(String word : wordSplitter.split(context)){
+    		Integer curFreq = wordFreq.get(word);
+    		if(curFreq==null){
+    			curFreq = 0;
+    		}
+    		wordFreq.put(word, ++curFreq);
+    	}
+    	
+    	return wordFreq;
+    }
+}

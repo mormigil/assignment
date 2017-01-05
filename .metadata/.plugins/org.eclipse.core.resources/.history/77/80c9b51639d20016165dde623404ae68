@@ -1,0 +1,49 @@
+package sparkassign.g2;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
+
+import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaPairRDD;
+import org.apache.spark.api.java.JavaSparkContext;
+
+import com.google.common.base.CharMatcher;
+import com.google.common.base.Splitter;
+
+import scala.Tuple2;
+
+/**
+ * Hello world!
+ *
+ */
+public class App 
+{
+    public static void main( String[] args )
+    {
+    	
+    	SparkConf sparkConf = new SparkConf().setAppName("SparkTest").setMaster("local[2]");
+        JavaSparkContext spark = new JavaSparkContext(sparkConf);
+        
+        JavaPairRDD<String, String> blogPosts = spark.wholeTextFiles("/media/removable/SD Card/blogPosts");
+        blogPosts.map(x -> new Tuple2<String, Map<String, Integer>>(x._1(), countWordFrequencies(x._2())));
+        
+        spark.close();
+    }
+    
+    public static Map<String, Integer> countWordFrequencies(String context){
+    	Splitter wordSplitter = Splitter.on(' ').trimResults(CharMatcher.JAVA_LETTER.negate()).omitEmptyStrings();
+    	
+    	Map<String, Integer> wordFreq = new HashMap<String, Integer>();
+    	
+    	for(String word : wordSplitter.split(context)){
+    		Integer curFreq = wordFreq.get(word);
+    		if(curFreq==null){
+    			curFreq = 0;
+    		}
+    		wordFreq.put(word, ++curFreq);
+    	}
+    	
+    	return wordFreq;
+    }
+}

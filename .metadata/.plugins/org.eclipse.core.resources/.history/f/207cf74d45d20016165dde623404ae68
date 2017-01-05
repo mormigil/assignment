@@ -1,0 +1,81 @@
+package sparkassign.g2;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Stream;
+
+import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaPairRDD;
+import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.JavaSparkContext;
+
+import com.google.common.base.CharMatcher;
+import com.google.common.base.Splitter;
+
+import scala.Tuple2;
+
+/**
+ * Hello world!
+ *
+ */
+public class App 
+{
+    public static void main( String[] args )
+    {
+    	
+    	SparkConf sparkConf = new SparkConf().setAppName("SparkTest").setMaster("local[2]");
+        JavaSparkContext spark = new JavaSparkContext(sparkConf);
+        
+        JavaPairRDD<String, String> blogPosts = spark.wholeTextFiles("/media/removable/SD Card/blogPosts");
+        JavaRDD<Tuple2<String, Map<String, Integer>>> blogPostWordFreqRDD = blogPosts.map(x -> new Tuple2<String, Map<String, Integer>>(x._1(), countWordFrequencies(x._2())));
+        
+        blogPostWordFreqRDD.cache();
+        
+        Map<String, Integer> masterWordFreq = 
+        		blogPostWordFreqRDD.map(x -> genMasterWordList(x)).reduce((x, y) -> combineMasterWordList(x, y));
+        
+        blogPostWordFreqRDD.
+        
+        spark.close();
+    }
+    
+    public static Map<String, Integer> 
+    	combineMasterWordList(Map<String, Integer> mainList, 
+    		Map<String, Integer> otherList){
+    	for(Entry<String, Integer> entry : otherList.entrySet()){
+    		Integer mainData = mainList.get(entry.getKey());
+    		if(mainData==null){
+    			mainData = 0;
+    		} 
+    		mainList.put(entry.getKey(), mainData+entry.getValue());
+    	}
+    	return mainList;
+    }
+    
+    public static Map<String, Integer> genMasterWordList(Tuple2<String, Map<String, Integer>> singleContextFreq){
+    	Map<String, Integer> masterWordList = new HashMap<String, Integer>();
+    	for(Entry<String, Integer> entry : singleContextFreq._2.entrySet()){
+    		masterWordList.put(entry.getKey(), entry.getValue());
+    	}
+    	return masterWordList;
+    }
+    
+    public static Map<String, Integer> countWordFrequencies(String context){
+    	Splitter wordSplitter = Splitter.on(' ').trimResults(CharMatcher.JAVA_LETTER.negate()).omitEmptyStrings();
+    	
+    	Map<String, Integer> wordFreq = new HashMap<String, Integer>();
+    	
+    	for(String word : wordSplitter.split(context)){
+    		Integer curFreq = wordFreq.get(word);
+    		if(curFreq==null){
+    			curFreq = 0;
+    		}
+    		wordFreq.put(word, ++curFreq);
+    	}
+    	
+    	return wordFreq;
+    }
+}

@@ -1,0 +1,196 @@
+package sparkassign.g2;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaPairRDD;
+import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.broadcast.Broadcast;
+
+import com.google.common.base.CharMatcher;
+import com.google.common.base.Splitter;
+
+import scala.Tuple2;
+
+/**
+ * Alright so this is my application for finding similarity between words 
+ * based on the words being in the same blog post.
+ * 
+ * I focused on a frequency based approach which I think turns out more like a expected value approach than probabilistic.
+ * If I went back and did it again I'd probably switch to just counting whether a word appeared in a post instead of the frequency.
+ * 
+ * Methodology:
+ * 
+ * I start by creating a local spark context and loading in the text files from an SD card
+ * Each blog post (text file) is then mapped into a frequency map that has entries of words to the number of times they were used
+ * 
+ * These maps are then cached and aggregated into broadcast variables so that there is a global lookup the frequency of a given word
+ * Additionally we get the total number of words across all blog posts.
+ * 
+ * Then the maps are rehashed into pair frequencies so that every pair of words in a blog post is mapped to the number of times it appeared
+ * These pairs are created lexicographically so that they can then be reduced by key into 
+ * the total occurrences of a pair of words in the same blog posts.
+ * 
+ * Then the probabilities are calculated and the result is written to a text file.
+ * 
+ * Question 1: Scalability
+ * 
+ * This solution should be pretty highly scalable. The local memory constraint is the
+ * size of the master word list. This could be turned into a custom accumulator however for a slight improvement.
+ * The solution itself is quite highly parallel as each document can count it's own words and count it's own pairs
+ * The first step of reducing the documents to frequencies should already greatly decrease overall memory needed.
+ * 
+ * You only have to run through every word in the blog posts once so that should be the largest time task. 
+ * The pairing also will take some time as you are double looping through each element in the map. There also is a
+ * relatively major shuffle in the reduceByKey function.
+ * 
+ * Overall we are accessing all of the data once, but hypothetically this would be generated with a low frequency
+ * so that cost shouldn't be major.
+ * 
+ * Question 2: Dynamically adding documents
+ * Adding a new document would currently need to be rerun through the model, but some small changes could fix this.
+ * The simple method would be to save the three needed pieces of data, the map of all words and frequencies, 
+ * the total number of words, and the map of all pairs of words to their frequencies. Then once
+ * a new document is received all three of these data structures can be added to and the probabilities 
+ * accordingly updated. This way the only major update is most likely the probability recalculation.
+ * 
+ */
+public class App implements Serializable
+{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5949733314738766267L;
+
+	public static void main( String[] args )
+    {
+    	
+		//set a local master since I don't have my own personal cluster for this
+    	SparkConf sparkConf = new SparkConf().setAppName("SparkTest").setMaster("local[2]");
+        JavaSparkContext spark = new JavaSparkContext(sparkConf);
+        
+        //get the files relevant this would be replaced with some hadoop access for a real product
+        JavaPairRDD<String, String> blogPosts = spark.wholeTextFiles("/media/removable/SD Card/blogs/testthirties/thirties");
+        JavaRDD<Map<String, Integer>> blogPostWordFreqRDD = blogPosts.map(x -> countWordFrequencies(x._2()));
+        
+        //caching ate up all my memory so I had to stop that
+        //blogPostWordFreqRDD.cache();
+        
+        //Get total counts for the frequencies of each word across all blog posts
+        Map<String, Integer> masterWordFreq = 
+        		blogPostWordFreqRDD.map(x -> genMasterWordList(x)).reduce((x, y) -> combineMasterWordList(x, y));
+        
+        //get total count for all words across all blog posts
+        int totalWords = masterWordFreq.values().stream().reduce((x,y) -> x+y).get();
+        
+        
+        //Turn these into broadcast variables so they can be accessed to calculate the probabilities
+        //this could also have been done with custom accumulators, but there are some problems with accumulators
+        //If I was really putting this out there though I would switch to accumulators for this sort of task
+        Broadcast<Map<String, Integer>> broadcastMasterFreq = spark.broadcast(masterWordFreq);
+        
+        Broadcast<Integer> broadcastTotalWords = spark.broadcast(totalWords);
+        
+        //create all pairs of words and flat map them with their frequencies
+        
+        JavaPairRDD<Tuple2<String, String>, Integer> allPairFreq = blogPostWordFreqRDD
+        		.flatMapToPair(x -> allWordPairFrequencies(x).iterator());
+        
+        //reduce by key so that each pair of words corresponds to the number of times they were found together
+        allPairFreq = allPairFreq.reduceByKey((x, y) -> x+y);
+        
+        //calculate probs and then output as text file
+        allPairFreq.map(x -> new Tuple2<Tuple2<String, String>, Double>(x._1(), 
+        		calculateSimilarity(x._2(), broadcastMasterFreq.getValue().get(x._1()._1()), 
+        				broadcastMasterFreq.getValue().get(x._1()._2()), broadcastTotalWords.getValue())));
+        
+        allPairFreq.saveAsTextFile("/media/removable/SD Card/blogs/ThirtiesReport");
+        
+        spark.close();
+    }
+	
+	
+	//I'd typically separate functions like these into classes, but for a test project I've left them here
+	//This is the statistics method for calculating the probabilites
+	public static double calculateSimilarity(int XYFreq, int XFreq, int YFreq, int totalWords){
+		double probXY = XYFreq/(totalWords);
+		double probX = XFreq/totalWords;
+		double probY =  YFreq/totalWords;
+		double probNotXY = probY-probXY;
+		double probXNotY = probX-probXY;
+		double probNotXNotY = 1-probX-probY+probXY;
+		double resultSum = 0;
+		//avoid undefined cases with log(0)
+		if(probXY>0)
+			resultSum = probXY*Math.log(probXY/(probX*probY));
+		if(probXNotY>0)
+			resultSum += probXNotY*Math.log(probXNotY/(probX*(1-probY)));
+		if(probNotXY>0)
+			resultSum += probNotXY*Math.log(probNotXY/((1-probX)*probY));
+		if(probNotXNotY>0)
+			resultSum += probNotXNotY*Math.log(probNotXNotY/((1-probX)*(1-probY)));
+		return resultSum;
+		
+	}
+    
+	//From the frequencies of each word generate in each file 
+	public static List<Tuple2<Tuple2<String, String>, Integer>> allWordPairFrequencies(Map<String, Integer> singleContextFreq){
+		List<Tuple2<Tuple2<String, String>, Integer>> pairList = new ArrayList<Tuple2<Tuple2<String, String>, Integer>>();
+		
+		for(Entry<String, Integer> wordFreq : singleContextFreq.entrySet()){
+			for(Entry<String, Integer> wordFreq2 : singleContextFreq.entrySet()){
+				int stringCompare = wordFreq.getKey().compareTo(wordFreq2.getKey());
+				if(stringCompare<0){
+					pairList.add(new Tuple2<Tuple2<String, String>, Integer>(new Tuple2<String, String>(wordFreq.getKey(), 
+							wordFreq2.getKey()), Math.min(wordFreq.getValue(), wordFreq2.getValue())));
+				}
+			}
+		}
+		return pairList;
+	}
+	
+	//generating the master map of the frequency of every word across all contexts
+    public static Map<String, Integer> 
+    	combineMasterWordList(Map<String, Integer> mainList, 
+    		Map<String, Integer> otherList){
+    	for(Entry<String, Integer> entry : otherList.entrySet()){
+    		Integer mainData = mainList.get(entry.getKey());
+    		if(mainData==null){
+    			mainData = 0;
+    		} 
+    		mainList.put(entry.getKey(), mainData+entry.getValue());
+    	}
+    	return mainList;
+    }
+    
+    public static Map<String, Integer> genMasterWordList(Map<String, Integer> singleContextFreq){
+    	Map<String, Integer> masterWordList = new HashMap<String, Integer>();
+    	for(Entry<String, Integer> entry : singleContextFreq.entrySet()){
+    		masterWordList.put(entry.getKey(), entry.getValue());
+    	}
+    	return masterWordList;
+    }
+    
+    //split the strings on spaces and remove all non letters. There would be some apostrophe words that would get affected, but minor for this assignment
+    public static Map<String, Integer> countWordFrequencies(String context){
+    	Splitter wordSplitter = Splitter.on(' ').trimResults(CharMatcher.JAVA_LETTER.negate()).omitEmptyStrings();
+    	
+    	Map<String, Integer> wordFreq = new HashMap<String, Integer>();
+    	
+    	for(String word : wordSplitter.split(context)){
+    		Integer curFreq = wordFreq.get(word);
+    		if(curFreq==null){
+    			curFreq = 0;
+    		}
+    		wordFreq.put(word, ++curFreq);
+    	}
+    	
+    	return wordFreq;
+    }
+}

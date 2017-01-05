@@ -1,0 +1,29 @@
+package sparkassign.g2;
+
+import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaPairRDD;
+import org.apache.spark.api.java.JavaSparkContext;
+
+/**
+ * Hello world!
+ *
+ */
+public class App 
+{
+    public static void main( String[] args )
+    {
+    	
+    	SparkConf sparkConf = new SparkConf().setAppName("SparkTest").setMaster("local[2]");
+        JavaSparkContext spark = new JavaSparkContext(sparkConf);
+        
+        JavaPairRDD<String, String> blogPosts = spark.wholeTextFiles("/media/removable/SD Card/blogPosts");
+        blogPosts.map(x -> )
+        
+        spark.close();
+    }
+    
+    public static Map<String, Integer> countWordFrequencies(String context){
+    	Splitter niceCommaSplitter = Splitter.on(',').omitEmptyStrings().trimResults();
+
+    }
+}
